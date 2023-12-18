@@ -29,6 +29,8 @@ export function generateRules(state: State, classNames: string[]): { root: Root;
   }
 }
 
+const TW_REGEX = /hsl\(var\(--twc-(\w+)-(\d+)\).*/
+
 export async function stringifyRoot(state: State, root: Root, uri?: string): Promise<string> {
   let settings = await state.editor.getConfiguration(uri)
   let tabSize = dlv(settings, 'editor.tabSize', 2)
@@ -41,6 +43,7 @@ export async function stringifyRoot(state: State, root: Root, uri?: string): Pro
   clone.walkAtRules('defaults', (node) => {
     node.remove()
   })
+
 
   if (showPixelEquivalents) {
     clone.walkDecls((decl) => {
@@ -56,6 +59,14 @@ export async function stringifyRoot(state: State, root: Root, uri?: string): Pro
       const color = getColorsInString(decl.value)[0]
       if(color) {
         decl.value = `${decl.value}/* ${culori.formatHex(color)} */`
+      }
+
+      const res = decl.value.match(TW_REGEX);
+      if (res) {
+        const [, color, value] = res;
+        const light = state.config.theme.colors[color][value]
+        const dark = state.config.theme.darkColors[color][value]
+        decl.value = `${decl.value}/* ${light} ${dark} */`
       }
     })
   }
