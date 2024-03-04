@@ -5,6 +5,11 @@
     "bootstrap": "lerna bootstrap --hoist"
   },
   "devDependencies": {
-    "lerna": "^3.22.1"
+    "lerna": "^3.22.1",
+    "node-gyp": "10.0.1", 
+    "nan": "2.18.0"
+  },
+  "resolutions": { 
+    "nan": "2.18.0"
   }
 }
