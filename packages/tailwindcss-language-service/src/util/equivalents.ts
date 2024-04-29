@@ -1,10 +1,10 @@
-import type { TailwindCssSettings } from './state'
+import type { TailwindCssSettings, State } from './state'
 import { equivalentPixelValues } from './pixelEquivalents'
 import { equivalentColorValues } from './colorEquivalents'
 import postcss, { type AcceptedPlugin } from 'postcss'
 import { applyComments, type Comment } from './comments'
 
-export function addEquivalents(css: string, settings: TailwindCssSettings): string {
+export function addEquivalents(css: string, settings: TailwindCssSettings, state: State): string {
   let comments: Comment[] = []
 
   let plugins: AcceptedPlugin[] = []
@@ -18,7 +18,7 @@ export function addEquivalents(css: string, settings: TailwindCssSettings): stri
     )
   }
 
-  plugins.push(equivalentColorValues({ comments }))
+  plugins.push(equivalentColorValues(state, { comments }))
 
   try {
     postcss(plugins).process(css, { from: undefined }).css

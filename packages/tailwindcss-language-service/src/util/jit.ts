@@ -44,7 +44,7 @@ export async function stringifyRoot(state: State, root: Root, uri?: string): Pro
 
   let css = clone.toString()
 
-  css = addEquivalents(css, settings.tailwindCSS)
+  css = addEquivalents(css, settings.tailwindCSS, state)
 
   let identSize = state.v4 ? 2 : 4
   let identPattern = state.v4 ? /^(?:  )+/gm : /^(?:    )+/gm
